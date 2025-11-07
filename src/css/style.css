@@ -261,3 +261,14 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+
+/*delete item from the cart*/
+.delete-btn {
+  background-color: var(--secondary-color);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
