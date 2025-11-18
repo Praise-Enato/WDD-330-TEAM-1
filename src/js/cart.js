@@ -1,5 +1,9 @@
+import { loadHeaderFooter } from "./utils.mjs";
 import { getCartItems, removeCartItem as removeCartItemFromStorage, updateCartItemQuantity } from "./cartStorage.mjs";
 import { notifyCartCountChange } from "./cartCount.js";
+
+// team activity -- part 11
+loadHeaderFooter();
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -42,10 +46,11 @@ function renderCartContents() {
 function cartItemTemplate(item) {
   const productLink = `../product_pages/?product=${item.Id}`;
   const colorName = item.Colors?.[0]?.ColorName ?? "";
+  const imageSrc = item.Images?.PrimaryMedium ?? item.Image ?? "";
   const newItem = `<li class="cart-card divider">
   <a href="${productLink}" class="cart-card__image">
     <img
-      src="${item.Image}"
+      src="${imageSrc}"
       alt="${item.Name}"
     />
   </a>
