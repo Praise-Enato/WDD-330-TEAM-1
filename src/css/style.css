@@ -123,11 +123,11 @@ button {
   text-align: center;
 }
 
-.cart svg {
+.cart svg , .wishlist svg{
   width: 25px;
 }
 
-.cart:hover svg {
+.cart:hover svg , .wishlist:hover svg {
   fill: gray;
 }
 
@@ -146,7 +146,7 @@ button {
   text-align: center;
 }
 
-.cart-count[hidden] {
+.cart-count[hidden],  .wishlist-count[hidden] {
   display: none;
 }
 
