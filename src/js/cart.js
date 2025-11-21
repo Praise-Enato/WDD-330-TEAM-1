@@ -1,5 +1,5 @@
 import { loadHeaderFooter } from "./utils.mjs";
-import { getCartItems, removeCartItem as removeCartItemFromStorage, updateCartItemQuantity } from "./cartStorage.mjs";
+import { getCartItems, removeCartItem as removeCartItemFromStorage, updateCartItemQuantity , saveCartItems} from "./cartStorage.mjs";
 import { notifyCartCountChange } from "./cartCount.js";
 
 // team activity -- part 11
@@ -36,6 +36,13 @@ function renderCartContents() {
     });
   });
 
+  document.querySelectorAll(".qty-decrease").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      const productId = event.currentTarget.dataset.id;
+      decreaseOne(productId);
+    });
+  });
+
   document.querySelectorAll(".cart-quantity-input").forEach((input) => {
     input.addEventListener("change", handleQuantityChange);
   });
@@ -46,43 +53,34 @@ function renderCartContents() {
 function cartItemTemplate(item) {
   const productLink = `../product_pages/?product=${item.Id}`;
   const colorName = item.Colors?.[0]?.ColorName ?? "";
-  const imageSrc = item.Images?.PrimaryMedium ?? item.Image ?? "";
+  const imageSrc = item.Images?.PrimaryMedium ?? ""; // for the Api IMAGE
+  const qty = item.quantity || 1;
+  const itemTotal = item.FinalPrice * qty;
   const newItem = `<li class="cart-card divider">
-  <a href="${productLink}" class="cart-card__image">
-    <img
-      src="${imageSrc}"
-      alt="${item.Name}"
-    />
-  </a>
-  <a href="${productLink}">
-    <h2 class="card__name">${item.Name}</h2>
-  </a>
-  <p class="cart-card__color">${colorName}</p>
-  <label class="cart-card__quantity">
-    <span class="cart-card__quantity-label">Qty:</span>
-    <input
-      type="number"
-      min="1"
-      step="1"
-      value="${item.quantity ?? 1}"
-      data-id="${item.Id}"
-      class="cart-quantity-input"
-      aria-label="Quantity for ${item.Name}"
-    />
-  </label>
-  <p class="cart-card__price">${currencyFormatter.format(item.FinalPrice)}</p>
-  <p class="cart-card__price cart-card__price-total">Total: ${currencyFormatter.format(
-    item.FinalPrice * (item.quantity ?? 1),
-  )}</p>
-  <button class="delete-btn" data-id="${item.Id}">❌ Eliminar</button>
-</li>`;
-
+    <a href="${productLink}" class="cart-card__image">
+      <img
+        src="${imageSrc}"
+        alt="${item.Name}"
+      />
+    </a>
+    <a href="${productLink}">
+      <h2 class="card__name">${item.Name}</h2>
+    </a>
+    <p class="cart-card__color">${colorName}</p>
+    <p class="cart-card__quantity">
+      qty: ${item.quantity || 1}
+      <button class="qty-decrease" data-id="${item.Id}">➖</button>
+    </p>
+    <p class="cart-card__price">${currencyFormatter.format(itemTotal)}</p>
+    <button class="delete-btn" data-id="${item.Id}">❌ Delete</button>
+  </li>`;
   return newItem;
 }
 
 // remove item from the cart
 function removeItemFromCart(productId) {
   removeCartItemFromStorage(productId);
+  notifyCartCountChange();
   renderCartContents();
 }
 
@@ -116,3 +114,26 @@ function showTotal(cartItems = getCartItems()) {
 }
 
 renderCartContents();
+
+// when the user clicck the btn
+document.querySelector("#checkoutBtn").addEventListener("click", () => {
+  window.location.href = "/checkout/index.html";
+});
+
+// we delete 1 item from the cart
+function decreaseOne(productId) {
+  const cart = getCartItems();
+  const item = cart.find((i) => i.Id == productId);
+
+  if (!item) return;
+
+  if (item.quantity > 1) {
+    item.quantity -= 1;
+    saveCartItems(cart);
+  } else {
+    removeCartItemFromStorage(productId);
+  }
+
+  notifyCartCountChange();
+  renderCartContents();
+}
