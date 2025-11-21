@@ -472,3 +472,9 @@ footer {
 #orden-summary li {
   margin-bottom: 0.5rem;
 }
+
+/*wishlist */
+.addToWishlistBtn {
+  margin-top: 2rem;
+  font-size: 50px
+}
