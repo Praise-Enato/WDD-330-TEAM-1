@@ -33,6 +33,7 @@ img {
 header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0.5rem;
 }
 
@@ -115,6 +116,12 @@ button {
 }
 
 /* End utility classes */
+
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 
 /* Cart icon styles */
 .cart , .wishlist {
