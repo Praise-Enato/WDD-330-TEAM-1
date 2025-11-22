@@ -55,7 +55,6 @@ export default class ProductDetails {
       Images: { PrimaryMedium: this.product.Images.PrimaryLarge },
       quantity: 1
     };
-
     addToWishlist(productForWishlist);
     this.setMessage(`${productForWishlist.Name} added to wishlist.`);
   }

@@ -1,7 +1,7 @@
 import { getWishlistItems, removeFromWishlist, moveToCart } from "./wishlistStorage.mjs";
 import { notifyCartCountChange } from "./cartCount.js";
 
-const container = document.getElementById("wishlistContainer");
+const container = document.querySelector("#wishlistContainer");
 
 function renderWishlist() {
   const items = getWishlistItems();
@@ -14,7 +14,7 @@ function renderWishlist() {
   }
 
   container.innerHTML = items.map(item => {
-       qty = item.quantity || 1; 
+      const qty = item.quantity || 1;
       return `
         <div class="wishlist-item" data-id="${item.Id}">
           <img src="${item.Images?.PrimaryMedium ?? ''}" alt="${item.Name}">
@@ -56,8 +56,5 @@ export function updateWishlistCount() {
   }
 }
 
-
-document.addEventListener("DOMContentLoaded", () => {
-  renderWishlist();
-  updateWishlistCount();
-});
+renderWishlist();
+updateWishlistCount();
