@@ -48,8 +48,16 @@ export default class ProductDetails {
 
   addProductToWishlist() {
     if (!this.product) return;
-    addToWishlist(this.product);
-    this.setMessage(`${this.product.NameWithoutBrand} added to wishlist.`);
+    const productForWishlist = {
+      Id: this.product.Id,
+      Name: this.product.NameWithoutBrand,
+      FinalPrice: this.product.FinalPrice,
+      Images: { PrimaryMedium: this.product.Images.PrimaryLarge },
+      quantity: 1
+    };
+
+    addToWishlist(productForWishlist);
+    this.setMessage(`${productForWishlist.Name} added to wishlist.`);
   }
 
   addProductToCart() {
